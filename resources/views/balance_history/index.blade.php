@@ -23,7 +23,7 @@
 @endif
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Balance History</div>
 
@@ -47,16 +47,19 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
-                    @if (request('user_id') != '')
+                    @if (!$balanceHistories->isEmpty() && request('user_id') != '')
                         <div class="current-balance">
-                            <strong>Current Balance:</strong> ${{ $balanceHistories[0]->new_balance }}
+                            <strong>Current Balance:</strong> $ {{ $balanceHistories[0]->new_balance }}
                         </div>
                     @endif
                     <!-- Display balance histories -->
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Transaction ID</th>
+                                <th>Transaction Code</th>
+                                <th>Transaction Type</th>
+                                <th>Transaction Description</th>
+                                <th>Amount</th>
                                 <th>User</th>
                                 <th>Previous Balance</th>
                                 <th>New Balance</th>
@@ -66,10 +69,13 @@
                         <tbody>
                             @foreach ($balanceHistories as $balanceHistory)
                                 <tr>
-                                    <td>{{ $balanceHistory->transaction_id }}</td>
+                                    <td>$ {{ $balanceHistory->transaction->transaction_code }}</td>
+                                    <td> {{ $balanceHistory->transaction->type }}</td>
+                                    <td> {{ $balanceHistory->transaction->description }}
+                                    <td>$ {{ $balanceHistory->transaction->amount }}</td>
                                     <td>{{ $balanceHistory->user->name }}</td>
-                                    <td>{{ $balanceHistory->previous_balance }}</td>
-                                    <td>{{ $balanceHistory->new_balance }}</td>
+                                    <td>$ {{ $balanceHistory->previous_balance }}</td>
+                                    <td>$ {{ $balanceHistory->new_balance }}</td>
                                     <!-- Add more columns as needed -->
                                 </tr>
                             @endforeach

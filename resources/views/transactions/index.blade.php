@@ -48,7 +48,7 @@ $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" titl
 @endphp
 
 {{-- Minimal example / fill data using the component slot --}}
-<x-adminlte-modal id="modalCustom" title="Account Policy" size="lg" theme="teal"
+<x-adminlte-modal id="modalCustom" title="Create Transaction" size="lg" theme="teal"
     icon="fas fa-bell" v-centered static-backdrop scrollable>
     <form id="transactionForm" action="{{ route('transactions.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -56,7 +56,7 @@ $btnDetails = '<button class="btn btn-xs btn-default text-teal mx-1 shadow" titl
             <label for="type">Type:</label>
             <select name="type" id="type" class="form-control">
                 <option value="topup">Top Up</option>
-                <option value="transaction">Regular</option>
+                <option value="transaction">Transaction</option>
             </select>
         </div>
         <div class="form-group">
@@ -123,7 +123,7 @@ foreach ($transactions as $transaction) {
         $transaction->transaction_code,
         $transaction->user->name,
         $transaction->type,
-        $transaction->amount,
+        "$ ".$transaction->amount,
         $transaction->description,
         $proofLink,
         // $actions,

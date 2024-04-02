@@ -19,51 +19,44 @@ class TransactionController extends Controller
 
         public function store(Request $request)
         {
-            // Check if all required fields are present
         if (!$request->filled(['type', 'amount'])) {
             return redirect()->back()->withInput()->with('error', 'Please fill in all required fields.');
         }
 
-        // Check if amount is numeric
         if (!is_numeric($request->amount)) {
             return redirect()->back()->withInput()->with('error', 'Amount must be numeric.');
         }
 
-        // Handle file upload for proof of top-up (if applicable)
-        Log::info($request);
         if ($request->hasFile('proof')) {
-            $proofPath = $request->file('proof')->store('proofs', 'public'); // Adjust storage path as needed
+            $proofPath = $request->file('proof')->store('proofs', 'public'); 
         } else {
             $proofPath = null;
         }
-        // Create a new transaction instance
+
         $transaction = new Transaction();
         $transaction->type = $request->type;
         $transaction->amount = $request->amount;
         $transaction->description = $request->description;
         $transaction->proof = "storage/".$proofPath;
-        $transaction->user_id = auth()->id(); // Set the user_id directly
+        $transaction->user_id = $request->user_id; 
         $transaction->save();
     
-        // Update balance history
         $balanceHistory = new BalanceHistory();
-        $balanceHistory->user_id = auth()->id();
+        $balanceHistory->user_id = $request->user_id;
         $balanceHistory->transaction_id = $transaction->id;
-        $balanceHistory->previous_balance = $this->getUserBalance(auth()->id()); // Get previous balance
+        $balanceHistory->previous_balance = $this->getUserBalance($request->user_id); // Get previous balance
         if ($request->type === 'topup') {
             $balanceHistory->new_balance = $balanceHistory->previous_balance + $transaction->amount; // Add to balance
         } elseif ($request->type === 'transaction') {
             $balanceHistory->new_balance = $balanceHistory->previous_balance - $transaction->amount; // Subtract from balance
         }
         $balanceHistory->save();
-    
-        // Redirect back with success message
         return redirect()->back()->with('success', 'Transaction successfully recorded.');
     }
     
     private function getUserBalance($userId)
     {
-        // Get the latest balance history record for the user
+
         $latestBalanceHistory = BalanceHistory::where('user_id', $userId)
             ->latest('created_at')
             ->first();
