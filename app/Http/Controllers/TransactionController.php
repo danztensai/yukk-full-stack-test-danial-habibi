@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\BalanceHistory;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\BalanceHistoryController;
 
 class TransactionController extends Controller
 {

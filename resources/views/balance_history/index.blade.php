@@ -47,9 +47,9 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
-                    @if (!$balanceHistories->isEmpty() && request('user_id') != '')
+                    @if (request('user_id') != '')
                         <div class="current-balance">
-                            <strong>Current Balance:</strong> $ {{ $balanceHistories[0]->new_balance }}
+                            <strong>Current Balance:</strong> $ {{ $currentBalance}}
                         </div>
                     @endif
                     <!-- Display balance histories -->
