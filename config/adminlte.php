@@ -257,7 +257,11 @@ return [
     */
 
     'use_route_url' => false,
+<<<<<<< HEAD
     'dashboard_url' => '/',
+=======
+    'dashboard_url' => 'home',
+>>>>>>> 1ec1ec940ad07fe823ae57f3a320b88fcf5133b2
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
